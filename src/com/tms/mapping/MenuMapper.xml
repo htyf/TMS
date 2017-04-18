@@ -1,0 +1,118 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.tms.mapping.MenuMapper">
+	<resultMap id="BaseResultMap" type="com.tms.model.Menu">
+		<!-- column对应的是数据库的列，property对应的是实体类的属性  -->
+		<id column="hid" property="hid" jdbcType="INTEGER" />
+		<result column="hname" property="hname" jdbcType="VARCHAR" />
+		<result column="tid" property="tid" jdbcType="VARCHAR" />
+		<result column="tname" property="tname" jdbcType="VARCHAR" />
+		<result column="address" property="address" jdbcType="VARCHAR" />
+		<result column="tnameEng" property="tnameEng" jdbcType="VARCHAR" />
+	</resultMap>	
+	<sql id="Base_Column_List" >
+		hid, hname, tid, tname, address, tnameEng
+    </sql> 
+      
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
+    select 
+    <include refid="Base_Column_List" />
+    from sys_headmenu
+    where hid = #{hid,jdbcType=INTEGER}
+  </select>
+  
+  <!-- 获取父级菜单和对应的子级菜单 -->
+  <select id="getAllMenu" resultMap="BaseResultMap" >
+  	SELECT 
+   	sys_headmenu.hname,sys_titlemenu.tname,sys_titlemenu.tid
+	FROM sys_headmenu
+	INNER JOIN sys_titlemenu
+	ON sys_headmenu.hid=sys_titlemenu.hid 
+	limit #{page,jdbcType=INTEGER},#{rows,jdbcType=INTEGER}
+  </select>
+    
+  <!-- 获取子级菜单表中有多少条数据  -->
+  <select id="getAllCount" resultType="java.lang.Integer" >
+    select 
+    count(1)
+    from sys_titlemenu
+  </select>
+  
+  
+  
+  
+  <!-- 根据菜单的id值来删除指定子级菜单 -->
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer" >
+    delete from sys_titlemenu
+    where tid = #{tid,jdbcType=INTEGER}
+  </delete>
+  
+  <!-- 根据菜单的id值来删除指定父级菜单 -->
+  <delete id="deleteHeadMenuByPrimaryKey" parameterType="java.lang.Integer" >
+    delete from sys_headmenu
+    where hid = #{hid,jdbcType=INTEGER}
+  </delete>
+  
+  
+  
+  <!-- 修改指定id的子级菜单名称 -->
+  <update id="updateByPrimaryKeySelective" parameterType="com.tms.model.Menu" >
+    update sys_titlemenu
+    <set>
+      <if test="tname != null" >
+        tname = #{tname,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where tid = #{tid,jdbcType=INTEGER}
+  </update>
+  
+  <!-- 
+  	parameterType :传给此语句的参数的完整类名或别名 
+  	resultType:语句返回值类型的整类名或别名。
+  			注意，如果是集合，那么这里填写的是集合的项的整类名或别名，而不是集合本身的类名。
+  			（resultType 与resultMap 不能并用）
+  	resultMap:引用的外部resultMap 名。
+  			结果集映射是MyBatis 中最强大的特性。
+  			许多复杂的映射都可以轻松解决。（resultType 与resultMap 不能并用）
+  -->
+  
+  <update id="updateByPrimaryKey" parameterType="com.tms.model.Menu" >
+    update sys_titlemenu
+    set tname = #{tname,jdbcType=VARCHAR}
+    where tid = #{tid,jdbcType=INTEGER}
+  </update>
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  <insert id="insert" parameterType="com.tms.model.Menu" >
+    insert into sys_headmenu(hid,hname)
+    values (#{hid,jdbcType=INTEGER}, #{hname,jdbcType=VARCHAR})
+  </insert>
+  <insert id="insertSelective" parameterType="com.tms.model.Menu" >
+    insert into sys_headmenu
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="hid != null" >
+        hid,
+      </if>
+      <if test="name != null" >
+        hname,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="hid != null" >
+        #{hid,jdbcType=INTEGER},
+      </if>
+      <if test="hname != null" >
+        #{hname,jdbcType=VARCHAR},
+      </if>    
+    </trim>
+  </insert>
+  
+  
+</mapper>	

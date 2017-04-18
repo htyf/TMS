@@ -1,0 +1,133 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.tms.mapping.ClassesManageMapper" >
+  <resultMap id="BaseResultMap" type="com.tms.model.Classes" >
+    <id column="classId" property="classid" jdbcType="VARCHAR" />
+    <result column="className" property="classname" jdbcType="VARCHAR" />
+    <result column="classOpenTime" property="classopentime" jdbcType="TIMESTAMP" />
+    <result column="classStuNum" property="classstunum" jdbcType="INTEGER" />
+    <result column="classManagerId" property="classmanagerid" jdbcType="VARCHAR" />
+    <result column="classCategoryId" property="classcategoryid" jdbcType="VARCHAR" />
+    <result column="classDesc" property="classdesc" jdbcType="VARCHAR" />
+    <result column="classQuality" property="classquality" jdbcType="VARCHAR" />
+    <result column="jobDireTeacId" property="jobdireteacid" jdbcType="VARCHAR" />
+    <result column="classMonitorId" property="classmonitorid" jdbcType="VARCHAR" />
+    <result column="classTeacId" property="classteacid" jdbcType="VARCHAR" />
+    <result column="stuName" property="stuName" jdbcType="VARCHAR" />
+    <result column="tname" property="tname" jdbcType="VARCHAR" />
+    
+    <result column="classTaecLevelId" property="classtaeclevelid" jdbcType="VARCHAR" />
+    <result column="isFace" property="isface" jdbcType="INTEGER" />
+    <result column="tid" property="tid" jdbcType="VARCHAR" />    
+    <result column="teachMethods" property="teachmethods" jdbcType="VARCHAR" />
+    <result column="jobTeaName" property="jobteaname" jdbcType="VARCHAR" />
+    <result column="courseContent" property="coursecontent" jdbcType="VARCHAR" />
+    
+  </resultMap>
+   <sql id="Base_Column_List" >
+    tbc.classId, tbc.className, tbc.classOpenTime, tbc.classStuNum, tbc.classManagerId, tbc.classCategoryId, 
+    tbc.classDesc, tbc.classQuality, tbc.jobDireTeacId, tbs.stuName, stt.tname, tbc.classTaecLevelId, 
+    tbc.isFace,stt.teachMethods, tbj.jobTeaName,tbcm.classManagerName,tbts.courseContent
+  </sql>
+   
+   <select id="getAllClasses" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    FROM tb_classes tbc,sys_teachreport_teacher stt,tb_student tbs ,tb_jobDireTeacher tbj,tb_classManager tbcm,tb_teachSchedule tbts
+    WHERE tbc.classMonitorId=tbs.stuId 
+    AND tbc.classTeacId = stt.tid 
+    AND tbj.jobTeacherId = tbc.jobDireTeacId 
+    AND tbcm.classManagerId = tbc.classManagerId
+    AND tbts.teachScheduleId = tbc.classTaecLevelId
+    GROUP BY tbc.classId
+  </select>
+  
+  <select id="getAllCount" resultType="java.lang.Integer" >
+    select 
+    count(1)
+    from tb_classes
+  </select>
+   
+   <select id="searchTid" resultType="java.lang.String" >
+    SELECT tid 
+    FROM sys_teachreport_teacher 
+    WHERE tname=#{tname,jdbcType=VARCHAR}
+  </select>
+  
+  <select id="searchStuId" resultType="java.lang.String" >
+    SELECT stuId
+    FROM tb_student
+    WHERE stuName=#{stuName,jdbcType=VARCHAR}
+  </select>
+  
+  <select id="searchJobDireId" resultType="java.lang.String" >
+    SELECT jobTeacherId 
+    FROM tb_jobDireTeacher 
+    WHERE jobTeaName = #{jobTeaName,jdbcType=VARCHAR}
+  </select>
+  
+  <update id="updateTeachMethods" parameterType="com.tms.model.Classes" >
+    UPDATE	sys_teachreport_teacher
+    SET teachMethods = #{teachmethods,jdbcType=VARCHAR} 
+    WHERE tid = #{tid,jdbcType=VARCHAR}
+  </update>
+  
+  <select id="searchClassManagerId" resultType="java.lang.String" >
+   SELECT classManagerId 
+   FROM tb_classManager 
+   WHERE classManagerName = #{classmanagername,jdbcType=VARCHAR}
+  </select>
+  
+  <select id="searchTeachScheduleId" resultType="java.lang.String" >
+  SELECT teachScheduleId 
+  FROM tb_teachSchedule 
+  WHERE courseContent = #{coursecontent,jdbcType=VARCHAR}
+  </select>
+  
+  <update id="updateForClass" parameterType="com.tms.model.Classes" >
+    update tb_classes 
+    set className = #{classname,jdbcType=VARCHAR},
+      classOpenTime = #{classopentime,jdbcType=TIMESTAMP},
+      classStuNum = #{classstunum,jdbcType=INTEGER},
+      classManagerId = #{classmanagerid,jdbcType=VARCHAR},
+      classCategoryId = #{classcategoryid,jdbcType=VARCHAR},
+      classDesc = #{classdesc,jdbcType=VARCHAR},
+      classQuality = #{classquality,jdbcType=VARCHAR},
+      jobDireTeacId = #{jobdireteacid,jdbcType=VARCHAR},
+      classMonitorId = #{classmonitorid,jdbcType=VARCHAR},
+      classTeacId = #{classteacid,jdbcType=VARCHAR},  
+      classTaecLevelId = #{classtaeclevelid,jdbcType=VARCHAR},
+      isFace = #{isface,jdbcType=INTEGER}  
+    where classId = #{classid,jdbcType=VARCHAR}
+  </update>
+  
+  <select id="searchIsContainStu" resultType="java.lang.Integer" >
+    SELECT COUNT(1) 
+    FROM tb_student 
+    WHERE classId = #{classid,jdbcType=VARCHAR}
+  </select>
+  
+  <insert id="addOneClass" parameterType="com.tms.model.Classes" >
+    insert into tb_classes (classId, className, classOpenTime, 
+      classStuNum, classManagerId, classCategoryId,classDesc,classQuality,jobDireTeacId,
+      classMonitorId,classTeacId,classTaecLevelId,isFace)
+      values (#{classid,jdbcType=VARCHAR},
+              #{classname,jdbcType=VARCHAR}, 
+              #{classopentime,jdbcType=TIMESTAMP}, 
+              #{classstunum,jdbcType=INTEGER}, 
+              #{classmanagerid,jdbcType=VARCHAR}, 
+              #{classcategoryid,jdbcType=VARCHAR},
+              #{classdesc,jdbcType=VARCHAR},
+              #{classquality,jdbcType=VARCHAR},
+              #{jobdireteacid,jdbcType=VARCHAR},
+              #{classmonitorid,jdbcType=VARCHAR},
+              #{classteacid,jdbcType=VARCHAR},
+              #{classtaeclevelid,jdbcType=VARCHAR},
+              #{isface,jdbcType=INTEGER})
+  </insert>
+  
+  <delete id="deleteForClassById" parameterType="java.lang.String" >
+    DELETE FROM tb_classes 
+    WHERE classId = #{id,jdbcType=VARCHAR}
+  </delete>
+  </mapper>

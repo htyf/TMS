@@ -1,0 +1,7 @@
+eclipse.preferences.version=1
+encoding//WebContent/jsp/menu.jsp=UTF-8
+encoding//src/com/tms/control/RoleController.java=UTF-8
+encoding//src/com/tms/control/UserController.java=UTF-8
+encoding//src/com/tms/control/WeeklyExamController.java=UTF-8
+encoding//src/com/tms/mapping/WeeklyExamShowOneMapper.java=UTF-8
+encoding/<project>=UTF-8

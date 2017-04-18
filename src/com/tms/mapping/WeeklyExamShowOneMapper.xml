@@ -1,0 +1,80 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.tms.mapping.WeeklyExamShowOneMapper">
+  <resultMap id="BaseResultMap" type="com.tms.model.WeeklyExamShowOne">
+   <result column="className" jdbcType="VARCHAR" property="classname" />
+   <result column="classStuNum" jdbcType="INTEGER" property="classStuNum" />
+   <result column="examStuNum" jdbcType="INTEGER" property="examStuNum" />
+   <result column="rateScore" jdbcType="DOUBLE" property="rateScore" />
+   <result column="tname" jdbcType="VARCHAR" property="tname" />
+   <result column="highRate" jdbcType="DOUBLE" property="highRate" />
+   <result column="lowRate" jdbcType="DOUBLE" property="lowRate" />
+   <result column="mediumRate" jdbcType="DOUBLE" property="mediumRate" />
+   <result column="classDesc" jdbcType="VARCHAR" property="classDesc" />
+   <result column="weeklyYear" jdbcType="VARCHAR" property="weeklyyear" />
+   <result column="weeklyMonth" jdbcType="VARCHAR" property="weeklymonth" />
+   <result column="weeklyDay" jdbcType="VARCHAR" property="weeklyday" />
+   <result column="week" jdbcType="VARCHAR" property="weeklyExamDay" />
+  </resultMap>
+ 
+  <!-- 根据指定周获取周考统计信息 -->
+  <select id="getAllWeeklyExamByWeek" resultMap="BaseResultMap" >
+  SELECT tc.className,tc.classStuNum,te.examStuNum,te.highRate,te.lowRate,te.mediumRate,
+	stt.tname,
+	FORMAT(SUM(twe.weeklyExamScore)/COUNT(twe.weeklyExamScore),2) AS 'rateScore',
+	CONCAT(twt.weeklyYear,'年',twt.weeklyMonth,'月 第',twt.weeklyDay,'周') AS 'week',
+	twt.weeklyYear,twt.weeklyMonth,twt.weeklyDay,twt.weeklyTime,
+	tc.classDesc
+	FROM tb_weeklyExam twe
+	LEFT JOIN tb_weeklyTime twt ON twe.weeklyTimeId = twt.weeklyTimeId
+	LEFT JOIN tb_classes tc ON twt.classId = tc.classId
+	LEFT JOIN tb_exam te ON tc.classId = te.examClass
+	LEFT JOIN sys_teachreport_teacher stt ON stt.tid = tc.classTeacId
+	GROUP BY tc.classId,twt.weeklyTime
+	HAVING twt.weeklyYear= #{wyear,jdbcType=VARCHAR} AND twt.weeklyMonth = #{wmonth,jdbcType=VARCHAR} AND twt.weeklyDay= #{wday,jdbcType=VARCHAR} 
+  	limit #{page,jdbcType=INTEGER},#{rows,jdbcType=INTEGER}
+  </select>
+  
+  <!-- 默认获取所有班级最新一周的周考统计 -->
+  <select id="getAllWeeklyExamNearest" resultMap="BaseResultMap" >
+  	SELECT * FROM
+	(
+		SELECT tc.className,tc.classStuNum,te.examStuNum,te.highRate,te.lowRate,te.mediumRate,
+		stt.tname,
+		FORMAT(SUM(twe.weeklyExamScore)/COUNT(twe.weeklyExamScore),2) AS 'rateScore',
+		CONCAT(twt.weeklyYear,'年',twt.weeklyMonth,'月 第',twt.weeklyDay,'周') AS 'week',
+		twt.weeklyYear,twt.weeklyMonth,twt.weeklyDay,twt.weeklyTime,
+		tc.classDesc
+		FROM tb_weeklyExam twe
+		LEFT JOIN tb_weeklyTime twt ON twe.weeklyTimeId = twt.weeklyTimeId
+		LEFT JOIN tb_classes tc ON twt.classId = tc.classId
+		LEFT JOIN tb_exam te ON tc.classId = te.examClass
+		LEFT JOIN sys_teachreport_teacher stt ON stt.tid = tc.classTeacId
+		GROUP BY twt.weeklyTime DESC,tc.classId
+	)a GROUP BY className
+	limit #{page,jdbcType=INTEGER},#{rows,jdbcType=INTEGER}
+  </select>
+  
+  <!--  获取所有的周考统计信息 -->
+  <select id="getAllWeeklyExam" resultMap="BaseResultMap" >
+  	SELECT tc.className,tc.classStuNum,te.examStuNum,te.highRate,te.lowRate,te.mediumRate,
+		stt.tname,
+		FORMAT(SUM(twe.weeklyExamScore)/COUNT(twe.weeklyExamScore),2) AS 'rateScore',
+		CONCAT(twt.weeklyYear,'年',twt.weeklyMonth,'月 第',twt.weeklyDay,'周') AS 'week',
+		twt.weeklyYear,twt.weeklyMonth,twt.weeklyDay,twt.weeklyTime,
+		tc.classDesc
+		FROM tb_weeklyExam twe
+		LEFT JOIN tb_weeklyTime twt ON twe.weeklyTimeId = twt.weeklyTimeId
+		LEFT JOIN tb_classes tc ON twt.classId = tc.classId
+		LEFT JOIN tb_exam te ON tc.classId = te.examClass
+		LEFT JOIN sys_teachreport_teacher stt ON stt.tid = tc.classTeacId
+		GROUP BY tc.classId,twt.weeklyTime DESC
+  	limit #{page,jdbcType=INTEGER},#{rows,jdbcType=INTEGER} 
+  </select>
+  
+  <select id="getAllCount" resultType="java.lang.Integer" >
+    select 
+    count(1)
+    from tb_classes
+  </select>
+</mapper>

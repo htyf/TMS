@@ -1,0 +1,82 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.tms.mapping.WeeklyExamMapper">
+  <resultMap id="BaseResultMap" type="com.tms.model.WeeklyExam">
+    <id column="weekliExamId" jdbcType="VARCHAR" property="weekliexamid" />
+    <result column="weeklyExamScore" jdbcType="DOUBLE" property="weeklyexamscore" />
+    <result column="stuId" jdbcType="VARCHAR" property="stuid" />
+    <result column="weeklyTimeId" jdbcType="VARCHAR" property="weeklytimeid" />
+  </resultMap>
+  <sql id="Base_Column_List">
+    weekliExamId, weeklyExamScore, stuId, weeklyTimeId
+  </sql>
+  <select id="selectByPrimaryKey" parameterType="java.lang.String" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from tb_weeklyExam
+    where weekliExamId = #{weekliexamid,jdbcType=VARCHAR}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.String">
+    delete from tb_weeklyExam
+    where weekliExamId = #{weekliexamid,jdbcType=VARCHAR}
+  </delete>
+  <insert id="insert" parameterType="com.tms.model.WeeklyExam">
+    insert into tb_weeklyExam (weekliExamId, weeklyExamScore, stuId, 
+      weeklyTimeId)
+    values (#{weekliexamid,jdbcType=VARCHAR}, #{weeklyexamscore,jdbcType=DOUBLE}, #{stuid,jdbcType=VARCHAR}, 
+      #{weeklytimeid,jdbcType=VARCHAR})
+  </insert>
+  <insert id="insertSelective" parameterType="com.tms.model.WeeklyExam">
+    insert into tb_weeklyExam
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="weekliexamid != null">
+        weekliExamId,
+      </if>
+      <if test="weeklyexamscore != null">
+        weeklyExamScore,
+      </if>
+      <if test="stuid != null">
+        stuId,
+      </if>
+      <if test="weeklytimeid != null">
+        weeklyTimeId,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="weekliexamid != null">
+        #{weekliexamid,jdbcType=VARCHAR},
+      </if>
+      <if test="weeklyexamscore != null">
+        #{weeklyexamscore,jdbcType=DOUBLE},
+      </if>
+      <if test="stuid != null">
+        #{stuid,jdbcType=VARCHAR},
+      </if>
+      <if test="weeklytimeid != null">
+        #{weeklytimeid,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.tms.model.WeeklyExam">
+    update tb_weeklyExam
+    <set>
+      <if test="weeklyexamscore != null">
+        weeklyExamScore = #{weeklyexamscore,jdbcType=DOUBLE},
+      </if>
+      <if test="stuid != null">
+        stuId = #{stuid,jdbcType=VARCHAR},
+      </if>
+      <if test="weeklytimeid != null">
+        weeklyTimeId = #{weeklytimeid,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where weekliExamId = #{weekliexamid,jdbcType=VARCHAR}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.tms.model.WeeklyExam">
+    update tb_weeklyExam
+    set weeklyExamScore = #{weeklyexamscore,jdbcType=DOUBLE},
+      stuId = #{stuid,jdbcType=VARCHAR},
+      weeklyTimeId = #{weeklytimeid,jdbcType=VARCHAR}
+    where weekliExamId = #{weekliexamid,jdbcType=VARCHAR}
+  </update>
+</mapper>

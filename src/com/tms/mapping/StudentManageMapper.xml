@@ -1,0 +1,317 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.tms.mapping.StudentManageMapper" >
+  <resultMap id="BaseResultMap" type="com.tms.model.Student" >
+    <id column="stuId" property="stuid" jdbcType="VARCHAR" />
+    <result column="stuName" property="stuname" jdbcType="VARCHAR" />
+    <result column="stuAge" property="stuage" jdbcType="INTEGER" />
+    <result column="stuSex" property="stusex" jdbcType="VARCHAR" />
+    <result column="borthDate" property="borthdate" jdbcType="DATE" />
+    <result column="idNum" property="idnum" jdbcType="VARCHAR" />
+    <result column="phone" property="phone" jdbcType="VARCHAR" />
+    <result column="addr" property="addr" jdbcType="VARCHAR" />
+    <result column="classId" property="classid" jdbcType="VARCHAR" />
+    <result column="createDate" property="createdate" jdbcType="TIMESTAMP" />
+    <result column="emerConPerson" property="emerconperson" jdbcType="VARCHAR" />
+    <result column="emerConPhone" property="emerconphone" jdbcType="VARCHAR" />
+    <result column="password" property="password" jdbcType="VARCHAR" />
+    <result column="stuNum" property="stunum" jdbcType="VARCHAR" />
+    <result column="status" property="status" jdbcType="INTEGER" />
+    <result column="entranceDate" property="entrancedate" jdbcType="DATE" />
+    <result column="graduationDate" property="graduationdate" jdbcType="DATE" />
+    <result column="nativePlace" property="nativeplace" jdbcType="VARCHAR" />
+    <result column="email" property="email" jdbcType="VARCHAR" />
+    <result column="communityId" property="communityid" jdbcType="VARCHAR" />
+    <result column="createUserName" property="createusername" jdbcType="VARCHAR" />
+    <result column="createUserId" property="createuserid" jdbcType="VARCHAR" />
+    <result column="deleteUserId" property="deleteuserid" jdbcType="VARCHAR" />
+  </resultMap>
+  <sql id="Base_Column_List" >
+    stuId, stuName, stuAge, stuSex, borthDate, idNum, phone, addr, classId, createDate, 
+    emerConPerson, emerConPhone, password, stuNum, status, entranceDate, graduationDate, 
+    nativePlace, email, communityId, createUserName, createUserId, deleteUserId
+  </sql>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.String" >
+    select 
+    <include refid="Base_Column_List" />
+    from tb_student
+    where stuId = #{stuid,jdbcType=VARCHAR}
+  </select>
+  <select id="getAllStudent" resultMap="BaseResultMap" >
+    select 
+    *
+    from tb_student 
+    limit #{page,jdbcType=INTEGER},#{rows,jdbcType=INTEGER}
+  </select>
+  
+   <select id="getAllCount" resultType="java.lang.Integer" >
+    select 
+    count(1)
+    from tb_student
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.String" >
+    delete from tb_student
+    where stuId = #{stuid,jdbcType=VARCHAR}
+  </delete>
+  <insert id="insert" parameterType="com.tms.model.Student" >
+    insert into tb_student (stuId, stuName, stuAge, 
+      stuSex, borthDate, idNum, 
+      phone, addr, classId, 
+      createDate, emerConPerson, emerConPhone, 
+      password, stuNum, status, 
+      entranceDate, graduationDate, nativePlace, 
+      email, communityId, createUserName, 
+      createUserId, deleteUserId)
+    values (#{stuid,jdbcType=VARCHAR}, #{stuname,jdbcType=VARCHAR}, #{stuage,jdbcType=INTEGER}, 
+      #{stusex,jdbcType=VARCHAR}, #{borthdate,jdbcType=DATE}, #{idnum,jdbcType=VARCHAR}, 
+      #{phone,jdbcType=VARCHAR}, #{addr,jdbcType=VARCHAR}, #{classid,jdbcType=VARCHAR}, 
+      #{createdate,jdbcType=TIMESTAMP}, #{emerconperson,jdbcType=VARCHAR}, #{emerconphone,jdbcType=VARCHAR}, 
+      #{password,jdbcType=VARCHAR}, #{stunum,jdbcType=VARCHAR}, #{status,jdbcType=INTEGER}, 
+      #{entrancedate,jdbcType=DATE}, #{graduationdate,jdbcType=DATE}, #{nativeplace,jdbcType=VARCHAR}, 
+      #{email,jdbcType=VARCHAR}, #{communityid,jdbcType=VARCHAR}, #{createusername,jdbcType=VARCHAR}, 
+      #{createuserid,jdbcType=VARCHAR}, #{deleteuserid,jdbcType=VARCHAR})
+  </insert>
+  <insert id="insertSelective" parameterType="com.tms.model.Student" >
+    insert into tb_student
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="stuid != null" >
+        stuId,
+      </if>
+      <if test="stuname != null" >
+        stuName,
+      </if>
+      <if test="stuage != null" >
+        stuAge,
+      </if>
+      <if test="stusex != null" >
+        stuSex,
+      </if>
+      <if test="borthdate != null" >
+        borthDate,
+      </if>
+      <if test="idnum != null" >
+        idNum,
+      </if>
+      <if test="phone != null" >
+        phone,
+      </if>
+      <if test="addr != null" >
+        addr,
+      </if>
+      <if test="classid != null" >
+        classId,
+      </if>
+      <if test="createdate != null" >
+        createDate,
+      </if>
+      <if test="emerconperson != null" >
+        emerConPerson,
+      </if>
+      <if test="emerconphone != null" >
+        emerConPhone,
+      </if>
+      <if test="password != null" >
+        password,
+      </if>
+      <if test="stunum != null" >
+        stuNum,
+      </if>
+      <if test="status != null" >
+        status,
+      </if>
+      <if test="entrancedate != null" >
+        entranceDate,
+      </if>
+      <if test="graduationdate != null" >
+        graduationDate,
+      </if>
+      <if test="nativeplace != null" >
+        nativePlace,
+      </if>
+      <if test="email != null" >
+        email,
+      </if>
+      <if test="communityid != null" >
+        communityId,
+      </if>
+      <if test="createusername != null" >
+        createUserName,
+      </if>
+      <if test="createuserid != null" >
+        createUserId,
+      </if>
+      <if test="deleteuserid != null" >
+        deleteUserId,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="stuid != null" >
+        #{stuid,jdbcType=VARCHAR},
+      </if>
+      <if test="stuname != null" >
+        #{stuname,jdbcType=VARCHAR},
+      </if>
+      <if test="stuage != null" >
+        #{stuage,jdbcType=INTEGER},
+      </if>
+      <if test="stusex != null" >
+        #{stusex,jdbcType=VARCHAR},
+      </if>
+      <if test="borthdate != null" >
+        #{borthdate,jdbcType=DATE},
+      </if>
+      <if test="idnum != null" >
+        #{idnum,jdbcType=VARCHAR},
+      </if>
+      <if test="phone != null" >
+        #{phone,jdbcType=VARCHAR},
+      </if>
+      <if test="addr != null" >
+        #{addr,jdbcType=VARCHAR},
+      </if>
+      <if test="classid != null" >
+        #{classid,jdbcType=VARCHAR},
+      </if>
+      <if test="createdate != null" >
+        #{createdate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="emerconperson != null" >
+        #{emerconperson,jdbcType=VARCHAR},
+      </if>
+      <if test="emerconphone != null" >
+        #{emerconphone,jdbcType=VARCHAR},
+      </if>
+      <if test="password != null" >
+        #{password,jdbcType=VARCHAR},
+      </if>
+      <if test="stunum != null" >
+        #{stunum,jdbcType=VARCHAR},
+      </if>
+      <if test="status != null" >
+        #{status,jdbcType=INTEGER},
+      </if>
+      <if test="entrancedate != null" >
+        #{entrancedate,jdbcType=DATE},
+      </if>
+      <if test="graduationdate != null" >
+        #{graduationdate,jdbcType=DATE},
+      </if>
+      <if test="nativeplace != null" >
+        #{nativeplace,jdbcType=VARCHAR},
+      </if>
+      <if test="email != null" >
+        #{email,jdbcType=VARCHAR},
+      </if>
+      <if test="communityid != null" >
+        #{communityid,jdbcType=VARCHAR},
+      </if>
+      <if test="createusername != null" >
+        #{createusername,jdbcType=VARCHAR},
+      </if>
+      <if test="createuserid != null" >
+        #{createuserid,jdbcType=VARCHAR},
+      </if>
+      <if test="deleteuserid != null" >
+        #{deleteuserid,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.tms.model.Student" >
+    update tb_student
+    <set >
+      <if test="stuname != null" >
+        stuName = #{stuname,jdbcType=VARCHAR},
+      </if>
+      <if test="stuage != null" >
+        stuAge = #{stuage,jdbcType=INTEGER},
+      </if>
+      <if test="stusex != null" >
+        stuSex = #{stusex,jdbcType=VARCHAR},
+      </if>
+      <if test="borthdate != null" >
+        borthDate = #{borthdate,jdbcType=DATE},
+      </if>
+      <if test="idnum != null" >
+        idNum = #{idnum,jdbcType=VARCHAR},
+      </if>
+      <if test="phone != null" >
+        phone = #{phone,jdbcType=VARCHAR},
+      </if>
+      <if test="addr != null" >
+        addr = #{addr,jdbcType=VARCHAR},
+      </if>
+      <if test="classid != null" >
+        classId = #{classid,jdbcType=VARCHAR},
+      </if>
+      <if test="createdate != null" >
+        createDate = #{createdate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="emerconperson != null" >
+        emerConPerson = #{emerconperson,jdbcType=VARCHAR},
+      </if>
+      <if test="emerconphone != null" >
+        emerConPhone = #{emerconphone,jdbcType=VARCHAR},
+      </if>
+      <if test="password != null" >
+        password = #{password,jdbcType=VARCHAR},
+      </if>
+      <if test="stunum != null" >
+        stuNum = #{stunum,jdbcType=VARCHAR},
+      </if>
+      <if test="status != null" >
+        status = #{status,jdbcType=INTEGER},
+      </if>
+      <if test="entrancedate != null" >
+        entranceDate = #{entrancedate,jdbcType=DATE},
+      </if>
+      <if test="graduationdate != null" >
+        graduationDate = #{graduationdate,jdbcType=DATE},
+      </if>
+      <if test="nativeplace != null" >
+        nativePlace = #{nativeplace,jdbcType=VARCHAR},
+      </if>
+      <if test="email != null" >
+        email = #{email,jdbcType=VARCHAR},
+      </if>
+      <if test="communityid != null" >
+        communityId = #{communityid,jdbcType=VARCHAR},
+      </if>
+      <if test="createusername != null" >
+        createUserName = #{createusername,jdbcType=VARCHAR},
+      </if>
+      <if test="createuserid != null" >
+        createUserId = #{createuserid,jdbcType=VARCHAR},
+      </if>
+      <if test="deleteuserid != null" >
+        deleteUserId = #{deleteuserid,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where stuId = #{stuid,jdbcType=VARCHAR}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.tms.model.Student" >
+    update tb_student
+    set stuName = #{stuname,jdbcType=VARCHAR},
+      stuAge = #{stuage,jdbcType=INTEGER},
+      stuSex = #{stusex,jdbcType=VARCHAR},
+      borthDate = #{borthdate,jdbcType=DATE},
+      idNum = #{idnum,jdbcType=VARCHAR},
+      phone = #{phone,jdbcType=VARCHAR},
+      addr = #{addr,jdbcType=VARCHAR},
+      classId = #{classid,jdbcType=VARCHAR},
+      createDate = #{createdate,jdbcType=TIMESTAMP},
+      emerConPerson = #{emerconperson,jdbcType=VARCHAR},
+      emerConPhone = #{emerconphone,jdbcType=VARCHAR},
+      password = #{password,jdbcType=VARCHAR},
+      stuNum = #{stunum,jdbcType=VARCHAR},
+      status = #{status,jdbcType=INTEGER},
+      entranceDate = #{entrancedate,jdbcType=DATE},
+      graduationDate = #{graduationdate,jdbcType=DATE},
+      nativePlace = #{nativeplace,jdbcType=VARCHAR},
+      email = #{email,jdbcType=VARCHAR},
+      communityId = #{communityid,jdbcType=VARCHAR},
+      createUserName = #{createusername,jdbcType=VARCHAR},
+      createUserId = #{createuserid,jdbcType=VARCHAR},
+      deleteUserId = #{deleteuserid,jdbcType=VARCHAR}
+    where stuId = #{stuid,jdbcType=VARCHAR}
+  </update>
+</mapper>

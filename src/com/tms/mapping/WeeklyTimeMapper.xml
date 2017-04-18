@@ -1,0 +1,106 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.tms.mapping.WeeklyTimeMapper" >
+  <resultMap id="BaseResultMap" type="com.tms.model.WeeklyTime" >
+    <id column="weeklyTimeId" property="weeklytimeid" jdbcType="VARCHAR" />
+    <result column="weeklyYear" property="weeklyyear" jdbcType="VARCHAR" />
+    <result column="weeklyMonth" property="weeklymonth" jdbcType="VARCHAR" />
+    <result column="weeklyDay" property="weeklyday" jdbcType="VARCHAR" />
+    <result column="weeklyTime" property="weeklytime" jdbcType="TIMESTAMP" />
+    <result column="stuId" property="stuid" jdbcType="VARCHAR" />
+  </resultMap>
+  <sql id="Base_Column_List" >
+    weeklyTimeId, weeklyYear, weeklyMonth, weeklyDay, weeklyTime, stuId
+  </sql>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.String" >
+    select 
+    <include refid="Base_Column_List" />
+    from tb_weekly_time
+    where weeklyTimeId = #{weeklytimeid,jdbcType=VARCHAR}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.String" >
+    delete from tb_weekly_time
+    where weeklyTimeId = #{weeklytimeid,jdbcType=VARCHAR}
+  </delete>
+  <insert id="insert" parameterType="com.tms.model.WeeklyTime" >
+    insert into tb_weekly_time (weeklyTimeId, weeklyYear, weeklyMonth, 
+      weeklyDay, weeklyTime, stuId
+      )
+    values (#{weeklytimeid,jdbcType=VARCHAR}, #{weeklyyear,jdbcType=VARCHAR}, #{weeklymonth,jdbcType=VARCHAR}, 
+      #{weeklyday,jdbcType=VARCHAR}, #{weeklytime,jdbcType=TIMESTAMP}, #{stuid,jdbcType=VARCHAR}
+      )
+  </insert>
+  <insert id="insertSelective" parameterType="com.tms.model.WeeklyTime" >
+    insert into tb_weekly_time
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="weeklytimeid != null" >
+        weeklyTimeId,
+      </if>
+      <if test="weeklyyear != null" >
+        weeklyYear,
+      </if>
+      <if test="weeklymonth != null" >
+        weeklyMonth,
+      </if>
+      <if test="weeklyday != null" >
+        weeklyDay,
+      </if>
+      <if test="weeklytime != null" >
+        weeklyTime,
+      </if>
+      <if test="stuid != null" >
+        stuId,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="weeklytimeid != null" >
+        #{weeklytimeid,jdbcType=VARCHAR},
+      </if>
+      <if test="weeklyyear != null" >
+        #{weeklyyear,jdbcType=VARCHAR},
+      </if>
+      <if test="weeklymonth != null" >
+        #{weeklymonth,jdbcType=VARCHAR},
+      </if>
+      <if test="weeklyday != null" >
+        #{weeklyday,jdbcType=VARCHAR},
+      </if>
+      <if test="weeklytime != null" >
+        #{weeklytime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="stuid != null" >
+        #{stuid,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.tms.model.WeeklyTime" >
+    update tb_weekly_time
+    <set >
+      <if test="weeklyyear != null" >
+        weeklyYear = #{weeklyyear,jdbcType=VARCHAR},
+      </if>
+      <if test="weeklymonth != null" >
+        weeklyMonth = #{weeklymonth,jdbcType=VARCHAR},
+      </if>
+      <if test="weeklyday != null" >
+        weeklyDay = #{weeklyday,jdbcType=VARCHAR},
+      </if>
+      <if test="weeklytime != null" >
+        weeklyTime = #{weeklytime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="stuid != null" >
+        stuId = #{stuid,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where weeklyTimeId = #{weeklytimeid,jdbcType=VARCHAR}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.tms.model.WeeklyTime" >
+    update tb_weekly_time
+    set weeklyYear = #{weeklyyear,jdbcType=VARCHAR},
+      weeklyMonth = #{weeklymonth,jdbcType=VARCHAR},
+      weeklyDay = #{weeklyday,jdbcType=VARCHAR},
+      weeklyTime = #{weeklytime,jdbcType=TIMESTAMP},
+      stuId = #{stuid,jdbcType=VARCHAR}
+    where weeklyTimeId = #{weeklytimeid,jdbcType=VARCHAR}
+  </update>
+</mapper>

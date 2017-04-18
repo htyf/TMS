@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.tms.mapping.WeeklyExamShowClassScoreMapper">
+  <resultMap id="BaseResultMap" type="com.tms.model.WeeklyExamShowClassScore">
+   <result column="className" jdbcType="VARCHAR" property="className" />
+   <result column="stuName" jdbcType="VARCHAR" property="stuName"/>
+    <result column="weeklyExamScore" jdbcType="DOUBLE" property="weeklyExamScore" />
+   <result column="weeklyYear" jdbcType="VARCHAR" property="weeklyyear" />
+   <result column="weeklyMonth" jdbcType="VARCHAR" property="weeklymonth" />
+   <result column="weeklyDay" jdbcType="VARCHAR" property="weeklyday" />
+   <result column="week" jdbcType="VARCHAR" property="weeklyExamDay" />
+  </resultMap>
+ 
+  <!-- 根据指定周获取周考统计信息 -->
+  <select id="getAllStudentWeekScore" resultMap="BaseResultMap" >
+  	SELECT tc.className,ts.stuName,twe.weeklyExamScore,twt.weeklyYear as weeklyYear,twt.weeklyMonth,twt.weeklyDay,
+	CONCAT(twt.weeklyYear,'年',twt.weeklyMonth,'月 第',twt.weeklyDay,'周') AS 'week',
+	twt.weeklyTime
+	FROM tb_student ts
+	LEFT JOIN tb_classes tc
+	ON ts.classId = tc.classId
+	LEFT JOIN tb_weeklyExam twe
+	ON ts.stuId = twe.stuId
+	LEFT JOIN tb_weeklyTime twt
+	ON twt.weeklyTimeId = twe.weeklyTimeId
+	WHERE tc.className =#{classname,jdbcType=VARCHAR} AND twt.weeklyYear=#{wyear,jdbcType=VARCHAR} AND twt.weeklyMonth=#{wmonth,jdbcType=VARCHAR} AND twt.weeklyDay=#{wday,jdbcType=VARCHAR}
+  	limit #{page,jdbcType=INTEGER},#{rows,jdbcType=INTEGER}
+  </select>
+  
+  
+  <select id="getAllCount" resultType="java.lang.Integer" >
+    select 
+    count(1)
+    from tb_classes
+  </select>
+</mapper>
